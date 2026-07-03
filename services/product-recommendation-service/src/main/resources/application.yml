@@ -1,0 +1,19 @@
+server:
+  port: 8812
+
+spring:
+  application:
+    name: product-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/shoe_ecommerce
+    redis:
+      host: localhost
+      port: 8812
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true

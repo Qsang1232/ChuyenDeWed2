@@ -1,0 +1,12 @@
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\entity\Order.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\event\OrderPlacedEvent.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\client\ProductClient.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\dto\ProductDto.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\config\RabbitMQConfig.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\service\OrderService.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\event\OrderProcessingListener.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\repository\OrderRepository.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\OrderServiceApplication.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\config\VNPayConfig.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\controller\OrderController.java
+D:\shoe-ecommerce\services\order-service\src\main\java\com\shoe\ecommerce\order\controller\PaymentController.java

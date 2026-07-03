@@ -1,0 +1,9 @@
+com\shoe\ecommerce\product\controller\FileUploadController.class
+com\shoe\ecommerce\product\controller\ProductController.class
+com\shoe\ecommerce\product\service\ProductService.class
+com\shoe\ecommerce\product\exception\GlobalExceptionHandler.class
+com\shoe\ecommerce\product\config\WebConfig.class
+com\shoe\ecommerce\product\ProductServiceApplication.class
+com\shoe\ecommerce\product\config\DatabaseSeeder.class
+com\shoe\ecommerce\product\entity\Product.class
+com\shoe\ecommerce\product\repository\ProductRepository.class

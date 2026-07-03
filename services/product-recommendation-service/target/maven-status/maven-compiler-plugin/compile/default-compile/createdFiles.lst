@@ -1,0 +1,4 @@
+com\shoe\ecommerce\product\client\ProductCatalogClient.class
+com\shoe\ecommerce\product\exception\GlobalExceptionHandler.class
+com\shoe\ecommerce\product\ProductServiceApplication.class
+com\shoe\ecommerce\product\controller\RecommendationController.class

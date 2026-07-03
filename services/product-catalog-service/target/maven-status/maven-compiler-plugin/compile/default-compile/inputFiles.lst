@@ -1,0 +1,9 @@
+D:\shoe-ecommerce\services\product-catalog-service\src\main\java\com\shoe\ecommerce\product\ProductServiceApplication.java
+D:\shoe-ecommerce\services\product-catalog-service\src\main\java\com\shoe\ecommerce\product\config\DatabaseSeeder.java
+D:\shoe-ecommerce\services\product-catalog-service\src\main\java\com\shoe\ecommerce\product\entity\Product.java
+D:\shoe-ecommerce\services\product-catalog-service\src\main\java\com\shoe\ecommerce\product\exception\GlobalExceptionHandler.java
+D:\shoe-ecommerce\services\product-catalog-service\src\main\java\com\shoe\ecommerce\product\config\WebConfig.java
+D:\shoe-ecommerce\services\product-catalog-service\src\main\java\com\shoe\ecommerce\product\controller\ProductController.java
+D:\shoe-ecommerce\services\product-catalog-service\src\main\java\com\shoe\ecommerce\product\service\ProductService.java
+D:\shoe-ecommerce\services\product-catalog-service\src\main\java\com\shoe\ecommerce\product\controller\FileUploadController.java
+D:\shoe-ecommerce\services\product-catalog-service\src\main\java\com\shoe\ecommerce\product\repository\ProductRepository.java
