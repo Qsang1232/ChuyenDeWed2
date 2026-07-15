@@ -8,6 +8,12 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.time.Duration;
 import java.util.Optional;
 
@@ -26,9 +32,23 @@ public class AuthController {
     }
 
     public static class RegisterRequest {
+        @NotBlank(message = "Username is required")
+        @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
         public String username;
+
+        @NotBlank(message = "Email is required")
+        @Email(message = "Invalid email format")
+        public String email;
+
+        @NotBlank(message = "Password is required")
+        @Size(min = 6, message = "Password must be at least 6 characters")
+        @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d@$!%*#?&]{6,}$", message = "Password must contain at least one letter and one number")
         public String password;
+
         public String role;
+        public String fullName;
+        public String phone;
+        public String address;
     }
 
     public static class LoginRequest {
@@ -52,9 +72,10 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest request) {
         try {
-            User user = userService.registerUser(request.username, request.password, request.role);
+            User user = userService.registerUser(request.username, request.email, request.password, request.role,
+                    request.fullName, request.phone, request.address);
             return ResponseEntity.status(201).body("User registered successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -64,6 +85,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Optional<User> userOpt = userService.findByUsername(loginRequest.username);
+        if (userOpt.isEmpty()) {
+            userOpt = userService.findByEmail(loginRequest.username);
+        }
         if (userOpt.isPresent()) {
             User user = userOpt.get();
             if (userService.verifyPassword(loginRequest.password, user.getPassword())) {
@@ -102,11 +126,15 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logoutUser(@RequestBody TokenRefreshRequest request) {
         String refreshToken = request.refreshToken;
-        if (tokenProvider.validateToken(refreshToken)) {
-            // Add to blacklist with TTL of 7 days
-            redisTemplate.opsForValue().set("blacklist:" + refreshToken, "true", Duration.ofDays(7));
+        if (refreshToken != null && !refreshToken.isBlank()) {
+            try {
+                // Best-effort: blacklist even if token is expired
+                redisTemplate.opsForValue().set("blacklist:" + refreshToken, "true", Duration.ofDays(7));
+            } catch (Exception ignored) {
+                // Redis failure should not block logout
+            }
             return ResponseEntity.ok("Log out successful");
         }
-        return ResponseEntity.status(400).body("Invalid token");
+        return ResponseEntity.status(400).body("Missing refresh token");
     }
 }

@@ -1,5 +1,6 @@
 package com.shoe.ecommerce.product.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +17,8 @@ import java.util.UUID;
 @RequestMapping("/api/upload")
 public class FileUploadController {
 
-    private static final String UPLOAD_DIR = "/app/uploads/";
+    @Value("${app.upload-dir:./uploads/}")
+    private String uploadDir;
 
     @PostMapping
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
@@ -26,7 +28,7 @@ public class FileUploadController {
 
         try {
             // Create upload directory if not exists
-            Path uploadPath = Paths.get(UPLOAD_DIR);
+            Path uploadPath = Paths.get(uploadDir).toAbsolutePath().normalize();
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
@@ -52,3 +54,4 @@ public class FileUploadController {
         }
     }
 }
+

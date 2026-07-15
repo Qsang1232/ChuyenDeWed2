@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../../api';
 
 function AdminDashboard() {
-  const [stats, setStats] = useState({ products: 0, orders: 0, revenue: 0, pending: 0 });
+  const [stats, setStats] = useState({ products: 0, orders: 0, revenue: 0, pending: 0, categories: 0 });
   const [recentOrders, setRecentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -13,13 +13,15 @@ function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const [productsRes, ordersRes] = await Promise.all([
+      const [productsRes, ordersRes, categoriesRes] = await Promise.all([
         api.get('/products'),
         api.get('/orders/all'),
+        api.get('/categories'),
       ]);
 
       const products = productsRes.data;
       const orders = ordersRes.data;
+      const categories = categoriesRes.data;
       const revenue = orders.reduce((sum, o) => sum + (o.totalAmount || 0), 0);
       const pending = orders.filter(o => o.status === 'PENDING').length;
 
@@ -28,6 +30,7 @@ function AdminDashboard() {
         orders: orders.length,
         revenue,
         pending,
+        categories: categories.length,
       });
 
       // Get 5 most recent orders
@@ -63,7 +66,7 @@ function AdminDashboard() {
       <h1 className="text-3xl font-black text-white mb-8">📊 Tổng quan hệ thống</h1>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
         <div className="glass p-6 rounded-2xl border border-white/10 hover:border-emerald-500/30 transition-all group">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">💰</div>
@@ -90,6 +93,14 @@ function AdminDashboard() {
           <h3 className="text-3xl font-black text-white mt-1">{stats.products}</h3>
         </div>
 
+        <Link to="/admin/categories" className="glass p-6 rounded-2xl border border-white/10 hover:border-purple-500/30 transition-all group cursor-pointer">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">🏷️</div>
+          </div>
+          <p className="text-slate-400 text-sm font-semibold uppercase tracking-wider">Danh mục</p>
+          <h3 className="text-3xl font-black text-purple-400 mt-1">{stats.categories}</h3>
+        </Link>
+
         <div className="glass p-6 rounded-2xl border border-white/10 hover:border-yellow-500/30 transition-all group">
           <div className="flex items-center justify-between mb-4">
             <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">⏳</div>
@@ -100,12 +111,19 @@ function AdminDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <Link to="/admin/products" className="glass p-6 rounded-2xl border border-white/10 hover:border-emerald-500/30 transition-all flex items-center gap-4 group">
           <div className="w-14 h-14 bg-emerald-500/20 rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">📦</div>
           <div>
             <h3 className="text-white font-bold text-lg">Quản lý sản phẩm</h3>
             <p className="text-slate-500 text-sm">Thêm, sửa, xóa sản phẩm giày</p>
+          </div>
+        </Link>
+        <Link to="/admin/categories" className="glass p-6 rounded-2xl border border-white/10 hover:border-purple-500/30 transition-all flex items-center gap-4 group">
+          <div className="w-14 h-14 bg-purple-500/20 rounded-xl flex items-center justify-center text-3xl group-hover:scale-110 transition-transform">🏷️</div>
+          <div>
+            <h3 className="text-white font-bold text-lg">Quản lý danh mục</h3>
+            <p className="text-slate-500 text-sm">Thêm, sửa, xóa danh mục sản phẩm</p>
           </div>
         </Link>
         <Link to="/admin/orders" className="glass p-6 rounded-2xl border border-white/10 hover:border-blue-500/30 transition-all flex items-center gap-4 group">

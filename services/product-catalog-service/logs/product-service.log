@@ -1,0 +1,77 @@
+2026-07-03 16:59:25,943 INFO o.s.b.StartupInfoLogger [main] Starting ProductServiceApplication using Java 21.0.8 with PID 25976 (D:\shoe-ecommerce\services\product-catalog-service\target\classes started by LOQ in D:\shoe-ecommerce\services\product-catalog-service)
+2026-07-03 16:59:25,943 DEBUG o.s.b.StartupInfoLogger [main] Running with Spring Boot v3.1.5, Spring v6.0.13
+2026-07-03 16:59:25,945 INFO o.s.b.SpringApplication [main] No active profile set, falling back to 1 default profile: "default"
+2026-07-03 16:59:26,918 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-03 16:59:26,927 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-03 16:59:27,129 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 190 ms. Found 1 JPA repository interfaces.
+2026-07-03 16:59:27,147 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Multiple Spring Data modules found, entering strict repository configuration mode
+2026-07-03 16:59:27,156 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2026-07-03 16:59:27,175 INFO o.s.d.r.c.RepositoryConfigurationExtensionSupport [main] Spring Data Redis - Could not safely identify store assignment for repository candidate interface com.shoe.ecommerce.product.repository.ProductRepository; If you want this repository to be a Redis repository, consider annotating your entities with one of these annotations: org.springframework.data.redis.core.RedisHash (preferred), or consider extending one of the following types with your repository: org.springframework.data.keyvalue.repository.KeyValueRepository
+2026-07-03 16:59:27,175 INFO o.s.d.r.c.RepositoryConfigurationDelegate [main] Finished Spring Data repository scanning in 5 ms. Found 0 Redis repository interfaces.
+2026-07-03 16:59:27,411 INFO o.s.c.c.s.GenericScope [main] BeanFactory id=aae5badf-9b8f-3bcd-9a76-5c47e2245895
+2026-07-03 16:59:27,850 INFO o.s.b.w.e.t.TomcatWebServer [main] Tomcat initialized with port(s): 8810 (http)
+2026-07-03 16:59:27,864 INFO o.a.j.l.DirectJDKLog [main] Initializing ProtocolHandler ["http-nio-8810"]
+2026-07-03 16:59:27,867 INFO o.a.j.l.DirectJDKLog [main] Starting service [Tomcat]
+2026-07-03 16:59:27,868 INFO o.a.j.l.DirectJDKLog [main] Starting Servlet engine: [Apache Tomcat/10.1.15]
+2026-07-03 16:59:27,987 INFO o.a.j.l.DirectJDKLog [main] Initializing Spring embedded WebApplicationContext
+2026-07-03 16:59:27,995 INFO o.s.b.w.s.c.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 1996 ms
+2026-07-03 16:59:28,451 INFO o.h.j.i.u.LogHelper [main] HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-07-03 16:59:28,545 INFO o.h.Version [main] HHH000412: Hibernate ORM core version 6.2.13.Final
+2026-07-03 16:59:28,551 INFO o.h.c.Environment [main] HHH000406: Using bytecode reflection optimizer
+2026-07-03 16:59:28,855 INFO o.s.o.j.p.SpringPersistenceUnitInfo [main] No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-03 16:59:28,883 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Starting...
+2026-07-03 16:59:29,354 INFO c.z.h.p.HikariPool [main] HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@64dcf763
+2026-07-03 16:59:29,357 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Start completed.
+2026-07-03 16:59:30,317 INFO o.h.e.t.j.p.i.JtaPlatformInitiator [main] HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-03 16:59:30,572 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-03 16:59:31,086 WARN o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration [main] spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-03 16:59:31,751 INFO o.s.c.n.e.c.DiscoveryClientOptionalArgsConfiguration [main] Eureka HTTP Client uses RestTemplate.
+2026-07-03 16:59:31,828 WARN o.s.c.l.c.LoadBalancerCacheAutoConfiguration$LoadBalancerCaffeineWarnLogger [main] Spring Cloud LoadBalancer is currently working with the default cache. While this cache implementation is useful for development and tests, it's recommended to use Caffeine cache in production.You can switch to using Caffeine cache, by adding it and org.springframework.cache.caffeine.CaffeineCacheManager to the classpath.
+2026-07-03 16:59:31,855 INFO o.s.c.n.e.InstanceInfoFactory [main] Setting initial instance status as: STARTING
+2026-07-03 16:59:32,003 INFO c.n.d.DiscoveryClient [main] Initializing Eureka in region us-east-1
+2026-07-03 16:59:32,010 INFO c.n.d.s.r.a.ConfigClusterResolver [main] Resolving eureka endpoints via configuration
+2026-07-03 16:59:32,035 INFO c.n.d.DiscoveryClient [main] Disable delta property : false
+2026-07-03 16:59:32,035 INFO c.n.d.DiscoveryClient [main] Single vip registry refresh property : null
+2026-07-03 16:59:32,037 INFO c.n.d.DiscoveryClient [main] Force full registry fetch : false
+2026-07-03 16:59:32,037 INFO c.n.d.DiscoveryClient [main] Application is null : false
+2026-07-03 16:59:32,037 INFO c.n.d.DiscoveryClient [main] Registered Applications size is zero : true
+2026-07-03 16:59:32,037 INFO c.n.d.DiscoveryClient [main] Application version is -1: true
+2026-07-03 16:59:32,038 INFO c.n.d.DiscoveryClient [main] Getting all instance registry info from the eureka server
+2026-07-03 16:59:32,387 INFO c.n.d.DiscoveryClient [main] The response status is 200
+2026-07-03 16:59:32,392 INFO c.n.d.DiscoveryClient [main] Starting heartbeat executor: renew interval is: 30
+2026-07-03 16:59:32,395 INFO c.n.d.InstanceInfoReplicator [main] InstanceInfoReplicator onDemand update allowed rate per min is 4
+2026-07-03 16:59:32,400 INFO c.n.d.DiscoveryClient [main] Discovery Client initialized at timestamp 1783072772399 with initial instances count: 4
+2026-07-03 16:59:32,404 INFO o.s.c.n.e.s.EurekaServiceRegistry [main] Registering application PRODUCT-CATALOG-SERVICE with eureka with status UP
+2026-07-03 16:59:32,405 INFO c.n.d.DiscoveryClient$3 [main] Saw local status change event StatusChangeEvent [timestamp=1783072772405, current=UP, previous=STARTING]
+2026-07-03 16:59:32,407 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-0] DiscoveryClient_PRODUCT-CATALOG-SERVICE/Administrator.mshome.net:product-catalog-service:8810: registering service...
+2026-07-03 16:59:32,407 INFO o.a.j.l.DirectJDKLog [main] Starting ProtocolHandler ["http-nio-8810"]
+2026-07-03 16:59:32,413 WARN o.s.c.s.AbstractApplicationContext [main] Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2026-07-03 16:59:32,416 INFO o.s.o.j.AbstractEntityManagerFactoryBean [main] Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-03 16:59:32,419 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Shutdown initiated...
+2026-07-03 16:59:32,444 INFO c.z.h.HikariDataSource [main] HikariPool-1 - Shutdown completed.
+2026-07-03 16:59:32,459 INFO c.n.d.DiscoveryClient [main] Shutting down DiscoveryClient ...
+2026-07-03 16:59:32,460 INFO c.n.d.DiscoveryClient [DiscoveryClient-InstanceInfoReplicator-0] DiscoveryClient_PRODUCT-CATALOG-SERVICE/Administrator.mshome.net:product-catalog-service:8810 - registration status: 204
+2026-07-03 16:59:32,462 INFO c.n.d.DiscoveryClient [main] Unregistering ...
+2026-07-03 16:59:32,481 INFO c.n.d.DiscoveryClient [main] DiscoveryClient_PRODUCT-CATALOG-SERVICE/Administrator.mshome.net:product-catalog-service:8810 - deregister  status: 200
+2026-07-03 16:59:32,485 INFO c.n.d.DiscoveryClient [main] Completed shut down of DiscoveryClient
+2026-07-03 16:59:32,487 INFO o.a.j.l.DirectJDKLog [main] Pausing ProtocolHandler ["http-nio-8810"]
+2026-07-03 16:59:32,487 INFO o.a.j.l.DirectJDKLog [main] Stopping service [Tomcat]
+2026-07-03 16:59:32,492 INFO o.a.j.l.DirectJDKLog [main] Stopping ProtocolHandler ["http-nio-8810"]
+2026-07-03 16:59:32,494 INFO o.a.j.l.DirectJDKLog [main] Destroying ProtocolHandler ["http-nio-8810"]
+2026-07-03 16:59:32,500 INFO o.s.b.a.l.ConditionEvaluationReportLogger [main] 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-07-03 16:59:32,514 ERROR o.s.b.d.LoggingFailureAnalysisReporter [main] 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8810 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8810 or configure this application to listen on another port.
+

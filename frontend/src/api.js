@@ -28,9 +28,13 @@ api.interceptors.response.use(
         if (error.response && error.response.status === 401) {
             console.error('Unauthorized! Please login again.');
             const hasToken = localStorage.getItem('token');
-            if (hasToken) {
+            const currentPath = window.location.pathname;
+            // Only redirect if not already on auth pages to prevent redirect loops
+            if (hasToken && currentPath !== '/login' && currentPath !== '/register') {
                 localStorage.removeItem('token');
-                window.location.reload(); 
+                localStorage.removeItem('username');
+                localStorage.removeItem('role');
+                window.location.href = '/login';
             }
         }
         return Promise.reject(error);

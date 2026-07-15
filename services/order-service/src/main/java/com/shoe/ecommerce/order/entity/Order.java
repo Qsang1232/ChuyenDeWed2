@@ -22,6 +22,9 @@ public class Order {
         createdAt = LocalDateTime.now();
     }
     
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<OrderItem> orderItems = new java.util.ArrayList<>();
+    
     // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -40,4 +43,17 @@ public class Order {
     
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public java.util.List<OrderItem> getOrderItems() { return orderItems; }
+    public void setOrderItems(java.util.List<OrderItem> orderItems) { 
+        this.orderItems = orderItems;
+        for (OrderItem item : orderItems) {
+            item.setOrder(this);
+        }
+    }
+    
+    public void addOrderItem(OrderItem item) {
+        orderItems.add(item);
+        item.setOrder(this);
+    }
 }

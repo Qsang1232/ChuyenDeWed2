@@ -6,6 +6,13 @@ import api from '../api';
 function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [filterStatus, setFilterStatus] = useState('ALL');
+
+  const filteredOrders = orders.filter(order => {
+    if (filterStatus === 'ALL') return true;
+    return order.status === filterStatus;
+  });
 
   useEffect(() => {
     fetchOrders();
@@ -36,6 +43,22 @@ function MyOrders() {
       'CANCELLED': { label: '❌ Đã hủy', color: 'text-red-400 bg-red-500/10 border-red-500/20' },
     };
     return map[status] || { label: status, color: 'text-gray-400 bg-gray-500/10 border-gray-500/20' };
+  };
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Chưa có thông tin';
+    return new Date(dateString).toLocaleString('vi-VN', {
+      hour: '2-digit', minute: '2-digit',
+      day: '2-digit', month: '2-digit', year: 'numeric'
+    });
+  };
+
+  const toggleExpand = (id) => {
+    if (expandedOrderId === id) {
+      setExpandedOrderId(null);
+    } else {
+      setExpandedOrderId(id);
+    }
   };
 
   const token = localStorage.getItem('token');
@@ -71,10 +94,34 @@ function MyOrders() {
       </Link>
       <h2 className="text-3xl font-extrabold text-white mb-8">📜 Lịch sử Đơn hàng</h2>
 
-      {orders.length === 0 ? (
+      {/* Filter Tabs */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        {[
+          { id: 'ALL', label: 'Tất cả' },
+          { id: 'PENDING', label: 'Chờ xác nhận' },
+          { id: 'CONFIRMED', label: 'Đã xác nhận' },
+          { id: 'SHIPPED', label: 'Đang giao' },
+          { id: 'COMPLETED', label: 'Hoàn thành' },
+          { id: 'CANCELLED', label: 'Đã hủy' }
+        ].map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setFilterStatus(tab.id)}
+            className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+              filterStatus === tab.id
+                ? 'bg-emerald-500 text-white shadow-[0_0_15px_rgba(16,185,129,0.3)]'
+                : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {filteredOrders.length === 0 ? (
         <div className="glass p-12 rounded-2xl text-center">
           <span className="text-6xl mb-6 block">📭</span>
-          <h3 className="text-2xl font-bold text-white mb-4">Chưa có đơn hàng nào</h3>
+          <h3 className="text-2xl font-bold text-white mb-4">Không tìm thấy đơn hàng nào</h3>
           <p className="text-slate-400 mb-6">Hãy mua sắm và đặt đơn hàng đầu tiên của bạn!</p>
           <Link to="/" className="inline-block px-8 py-3 bg-emerald-500 text-white font-bold rounded-xl hover:bg-emerald-400 transition-all">
             Mua sắm ngay
@@ -82,26 +129,71 @@ function MyOrders() {
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          {orders.map(order => {
+          {filteredOrders.map(order => {
             const statusInfo = getStatusInfo(order.status);
             return (
-              <div key={order.id} className="glass p-6 rounded-2xl border border-white/10 hover:border-white/20 transition-all">
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+              <div key={order.id} className="glass rounded-2xl border border-white/10 hover:border-white/20 transition-all overflow-hidden">
+                {/* Header / Summary */}
+                <div 
+                  className="p-6 cursor-pointer flex flex-col md:flex-row justify-between items-start md:items-center gap-4 hover:bg-white/5 transition-colors"
+                  onClick={() => toggleExpand(order.id)}
+                >
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-white font-bold">Đơn hàng #{order.id}</h3>
+                      <h3 className="text-white font-bold text-lg">Đơn hàng #{order.id}</h3>
                       <span className={`px-3 py-1 rounded-lg text-xs font-bold border ${statusInfo.color}`}>
                         {statusInfo.label}
                       </span>
                     </div>
-                    <p className="text-slate-500 text-sm font-mono">Mã: {order.orderCode}</p>
+                    <div className="text-slate-500 text-sm font-mono flex items-center gap-4">
+                      <span>Mã: {order.orderCode}</span>
+                      <span>•</span>
+                      <span>📅 {formatDate(order.createdAt)}</span>
+                    </div>
                   </div>
-                  <div className="text-right">
+                  <div className="text-right flex items-center gap-6">
                     <div className="text-2xl font-bold text-emerald-400">
                       {order.totalAmount?.toLocaleString()}đ
                     </div>
+                    <div className={`text-slate-400 transition-transform duration-300 ${expandedOrderId === order.id ? 'rotate-180' : ''}`}>
+                      ▼
+                    </div>
                   </div>
                 </div>
+
+                {/* Expanded Details */}
+                {expandedOrderId === order.id && (
+                  <div className="p-6 border-t border-white/10 bg-black/20">
+                    <h4 className="text-white font-semibold mb-4">Chi tiết sản phẩm</h4>
+                    <div className="space-y-4">
+                      {order.orderItems && order.orderItems.length > 0 ? (
+                        order.orderItems.map((item, idx) => (
+                          <div key={idx} className="flex justify-between items-center bg-white/5 p-4 rounded-xl border border-white/5">
+                            <div>
+                              <div className="text-white font-medium">{item.name}</div>
+                              <div className="text-sm text-slate-400 mt-1">
+                                Phân loại: Size {item.size} - {item.gender === 'Men' ? 'Nam' : 'Nữ'}
+                              </div>
+                              <div className="text-sm text-slate-400">
+                                Số lượng: <span className="text-white font-semibold">{item.quantity}</span>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="text-emerald-400 font-semibold">
+                                {item.price?.toLocaleString()}đ
+                              </div>
+                              <div className="text-xs text-slate-500 mt-1">
+                                Tổng: {(item.price * item.quantity)?.toLocaleString()}đ
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-slate-500 text-sm">Không có thông tin chi tiết sản phẩm.</div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}

@@ -21,6 +21,24 @@ spring:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
       port: ${SPRING_DATA_REDIS_PORT:6379}
 
+  # === Gmail SMTP Configuration ===
+  # Để gửi email thật qua Gmail:
+  # 1. Bật xác minh 2 bước (2FA) cho tài khoản Google
+  # 2. Tạo App Password: Google Account → Security → App Passwords
+  # 3. Set biến môi trường: MAIL_USERNAME=your@gmail.com MAIL_PASSWORD=xxxx-xxxx-xxxx-xxxx
+  # Nếu không cấu hình, hệ thống sẽ chạy DEV MODE (in link reset ra console)
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    port: ${MAIL_PORT:587}
+    username: sangnguyenquoc111@gmail.com
+    password: phmyuwunlrgsrjqa
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 eureka:
   client:
     service-url:

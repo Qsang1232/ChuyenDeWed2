@@ -3,5 +3,7 @@ D:\shoe-ecommerce\services\user-service\src\main\java\com\shoe\ecommerce\user\co
 D:\shoe-ecommerce\services\user-service\src\main\java\com\shoe\ecommerce\user\security\JwtTokenProvider.java
 D:\shoe-ecommerce\services\user-service\src\main\java\com\shoe\ecommerce\user\UserServiceApplication.java
 D:\shoe-ecommerce\services\user-service\src\main\java\com\shoe\ecommerce\user\entity\User.java
+D:\shoe-ecommerce\services\user-service\src\main\java\com\shoe\ecommerce\user\service\EmailService.java
 D:\shoe-ecommerce\services\user-service\src\main\java\com\shoe\ecommerce\user\security\SecurityConfig.java
+D:\shoe-ecommerce\services\user-service\src\main\java\com\shoe\ecommerce\user\controller\ForgotPasswordController.java
 D:\shoe-ecommerce\services\user-service\src\main\java\com\shoe\ecommerce\user\service\UserService.java

@@ -17,7 +17,7 @@ public class UserServiceApplication {
     public CommandLineRunner initData(UserService userService) {
         return args -> {
             if (userService.findByUsername("admin").isEmpty()) {
-                userService.registerUser("admin", "password", "ADMIN");
+                userService.registerUser("admin", "admin@shoe-ecommerce.com", "password", "ADMIN");
             }
         };
     }

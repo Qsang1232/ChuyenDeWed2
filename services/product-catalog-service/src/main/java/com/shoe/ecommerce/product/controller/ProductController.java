@@ -18,8 +18,29 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> getAllProducts() {
-        return productService.getAllProducts();
+    public List<Product> getAllProducts(@RequestParam(required = false) String category) {
+        return productService.getAllProducts(category);
+    }
+
+    @GetMapping("/paged")
+    public org.springframework.data.domain.Page<Product> getPagedProducts(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String search,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size) {
+        if ("all".equalsIgnoreCase(category)) category = null;
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size);
+        return productService.getPagedProducts(category, search, pageable);
+    }
+
+    @GetMapping("/featured")
+    public List<Product> getFeaturedProducts() {
+        return productService.getFeaturedProducts();
+    }
+
+    @GetMapping("/best-selling")
+    public List<Product> getBestSellingProducts() {
+        return productService.getBestSellingProducts();
     }
 
     @GetMapping("/{id}")
@@ -51,5 +72,11 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PostMapping("/deduct-stock")
+    public ResponseEntity<?> deductStock(@RequestBody com.shoe.ecommerce.product.dto.StockDeductRequest request) {
+        productService.deductStock(request);
+        return ResponseEntity.ok("Stock deducted successfully");
     }
 }

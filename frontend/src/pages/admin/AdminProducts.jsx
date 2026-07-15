@@ -4,11 +4,13 @@ import api from '../../api';
 
 function AdminProducts() {
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [brands, setBrands] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const [form, setForm] = useState({ name: '', brand: '', basePrice: '', description: '', imageUrl: '' });
+  const [form, setForm] = useState({ name: '', brand: '', basePrice: '', description: '', imageUrl: '', category: '', stockQuantityMen: '100', stockQuantityWomen: '100' });
 
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -31,15 +33,21 @@ function AdminProducts() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchData();
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchData = async () => {
     try {
-      const res = await api.get('/products');
-      setProducts(res.data);
+      const [prodRes, catRes, brandRes] = await Promise.all([
+        api.get('/products'),
+        api.get('/categories'),
+        api.get('/brands')
+      ]);
+      setProducts(prodRes.data);
+      setCategories(catRes.data);
+      setBrands(brandRes.data);
     } catch (e) {
-      toast.error('Lỗi khi tải danh sách sản phẩm');
+      toast.error('Lỗi khi tải dữ liệu');
     } finally {
       setLoading(false);
     }
@@ -47,7 +55,7 @@ function AdminProducts() {
 
   const openCreateForm = () => {
     setEditingProduct(null);
-    setForm({ name: '', brand: '', basePrice: '', description: '', imageUrl: '' });
+    setForm({ name: '', brand: '', basePrice: '', description: '', imageUrl: '', category: '', stockQuantityMen: '100', stockQuantityWomen: '100' });
     setShowForm(true);
   };
 
@@ -59,13 +67,21 @@ function AdminProducts() {
       basePrice: product.basePrice?.toString() || '',
       description: product.description || '',
       imageUrl: product.imageUrl || '',
+      category: product.category || '',
+      stockQuantityMen: product.stockQuantityMen?.toString() || '0',
+      stockQuantityWomen: product.stockQuantityWomen?.toString() || '0',
     });
     setShowForm(true);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const payload = { ...form, basePrice: parseFloat(form.basePrice) };
+    const payload = { 
+      ...form, 
+      basePrice: parseFloat(form.basePrice),
+      stockQuantityMen: parseInt(form.stockQuantityMen, 10),
+      stockQuantityWomen: parseInt(form.stockQuantityWomen, 10)
+    };
 
     try {
       if (editingProduct) {
@@ -76,7 +92,7 @@ function AdminProducts() {
         toast.success('Thêm sản phẩm mới thành công!');
       }
       setShowForm(false);
-      fetchProducts();
+      fetchData();
     } catch (e) {
       toast.error('Thao tác thất bại. Vui lòng thử lại.');
     }
@@ -87,7 +103,7 @@ function AdminProducts() {
     try {
       await api.delete(`/products/${id}`);
       toast.success('Đã xóa sản phẩm!');
-      fetchProducts();
+      fetchData();
     } catch (e) {
       toast.error('Xóa thất bại.');
     }
@@ -134,16 +150,48 @@ function AdminProducts() {
                 className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
                 value={form.name} onChange={e => setForm({...form, name: e.target.value})}
               />
-              <input
-                type="text" placeholder="Thương hiệu (Nike, Adidas...)"
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
-                value={form.brand} onChange={e => setForm({...form, brand: e.target.value})}
-              />
-              <input
-                type="number" placeholder="Giá (VNĐ)" required
-                className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
-                value={form.basePrice} onChange={e => setForm({...form, basePrice: e.target.value})}
-              />
+              
+              <div className="grid grid-cols-2 gap-4">
+                <select
+                  required
+                  className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none appearance-none"
+                  value={form.category} onChange={e => setForm({...form, category: e.target.value})}
+                  style={{backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1.25rem'}}
+                >
+                  <option value="" className="bg-[#1a1d27]">-- Chọn danh mục --</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.name} className="bg-[#1a1d27]">{cat.name}</option>
+                  ))}
+                </select>
+                
+                <select
+                  className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none appearance-none"
+                  value={form.brand} onChange={e => setForm({...form, brand: e.target.value})}
+                  style={{backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1.25rem'}}
+                >
+                  <option value="" className="bg-[#1a1d27]">-- Chọn Hãng giày --</option>
+                  {brands.map(b => (
+                    <option key={b.id} value={b.name} className="bg-[#1a1d27]">{b.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex gap-4">
+                <input
+                  type="number" placeholder="Giá (VNĐ)" required
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
+                  value={form.basePrice} onChange={e => setForm({...form, basePrice: e.target.value})}
+                />
+                <input
+                  type="number" placeholder="Tồn kho Nam" required min="0"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
+                  value={form.stockQuantityMen} onChange={e => setForm({...form, stockQuantityMen: e.target.value})}
+                />
+                <input
+                  type="number" placeholder="Tồn kho Nữ" required min="0"
+                  className="flex-1 bg-white/5 border border-white/10 rounded-xl py-3 px-4 text-white focus:border-emerald-500 focus:outline-none"
+                  value={form.stockQuantityWomen} onChange={e => setForm({...form, stockQuantityWomen: e.target.value})}
+                />
+              </div>
 
               {/* Image Upload */}
               <div className="space-y-3">
@@ -202,7 +250,9 @@ function AdminProducts() {
               <th className="text-left p-4 text-slate-400 font-semibold text-sm uppercase tracking-wider">Ảnh</th>
               <th className="text-left p-4 text-slate-400 font-semibold text-sm uppercase tracking-wider">Tên</th>
               <th className="text-left p-4 text-slate-400 font-semibold text-sm uppercase tracking-wider">Thương hiệu</th>
+              <th className="text-left p-4 text-slate-400 font-semibold text-sm uppercase tracking-wider">Danh mục</th>
               <th className="text-left p-4 text-slate-400 font-semibold text-sm uppercase tracking-wider">Giá</th>
+              <th className="text-left p-4 text-slate-400 font-semibold text-sm uppercase tracking-wider">Tồn kho</th>
               <th className="text-right p-4 text-slate-400 font-semibold text-sm uppercase tracking-wider">Thao tác</th>
             </tr>
           </thead>
@@ -218,7 +268,18 @@ function AdminProducts() {
                 </td>
                 <td className="p-4 text-white font-semibold">{product.name}</td>
                 <td className="p-4 text-slate-400">{product.brand || '—'}</td>
+                <td className="p-4">
+                  {product.category ? (
+                    <span className="px-2 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-xs font-semibold">{product.category}</span>
+                  ) : (
+                    <span className="text-slate-500">—</span>
+                  )}
+                </td>
                 <td className="p-4 text-emerald-400 font-bold">{product.basePrice?.toLocaleString()}đ</td>
+                <td className="p-4 text-slate-400 text-sm">
+                  Nam: <span className={product.stockQuantityMen > 0 ? "text-emerald-400" : "text-red-400"}>{product.stockQuantityMen || 0}</span> <br/>
+                  Nữ: <span className={product.stockQuantityWomen > 0 ? "text-emerald-400" : "text-red-400"}>{product.stockQuantityWomen || 0}</span>
+                </td>
                 <td className="p-4 text-right">
                   <div className="flex gap-2 justify-end">
                     <button

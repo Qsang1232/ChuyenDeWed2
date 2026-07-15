@@ -18,14 +18,24 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User registerUser(String username, String rawPassword, String role) {
+    public User registerUser(String username, String email, String rawPassword, String role) {
+        return registerUser(username, email, rawPassword, role, null, null, null);
+    }
+
+    public User registerUser(String username, String email, String rawPassword, String role,
+                             String fullName, String phone, String address) {
         if (userRepository.findByUsername(username).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
+        // Email duplication is now allowed
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setEmail(email);
         user.setRole(role != null ? role.toUpperCase() : "USER");
+        user.setFullName(fullName);
+        user.setPhone(phone);
+        user.setAddress(address);
         return userRepository.save(user);
     }
 
@@ -33,7 +43,12 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findFirstByEmail(email);
+    }
+
     public boolean verifyPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }
+

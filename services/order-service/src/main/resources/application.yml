@@ -1,5 +1,7 @@
 server:
   port: 8813
+  error:
+    include-message: always
 
 spring:
   application:
@@ -45,11 +47,11 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,circuitbreakers
+        include: "*"
 
 # VNPay Sandbox Configuration
 vnpay:
-  tmnCode: "QZ5O8S0S"
-  hashSecret: "V5W3D8R4K1N7Q2M9P6Z0X3C8B4V2N1M6"
+  tmnCode: "7I5BTEBY"
+  hashSecret: "Q6LJTLNLJ9D1XGA7I093AEPU1WFWSCY0"
   payUrl: "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"
   returnUrl: "http://localhost:8900/api/payment/vnpay-return"

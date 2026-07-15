@@ -8,6 +8,8 @@ CREATE TABLE users (
     full_name VARCHAR(100) NOT NULL,
     phone_number VARCHAR(20),
     role VARCHAR(20) DEFAULT 'ROLE_USER',
+    reset_token VARCHAR(255),
+    reset_token_expiry TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );

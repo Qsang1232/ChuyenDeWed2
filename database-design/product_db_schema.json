@@ -3,7 +3,7 @@
   "name": "Nike Air Force 1 '07",
   "slug": "nike-air-force-1-07",
   "brand": "Nike",
-  "category": "Sneakers",
+  "categories": ["Giày Thể Thao", "Giày Chạy Bộ"],
   "description": "Giày thể thao cổ điển với đệm khí êm ái.",
   "basePrice": 2500000,
   "images": [
@@ -20,6 +20,8 @@
       "sku": "NK-AF1-WHT-40",
       "color": "White",
       "size": 40,
+      "gender": "Unisex",
+      "stock_quantity": 50,
       "price_modifier": 0,
       "thumbnail": "https://example.com/images/nike-af1-wht.jpg"
     },
@@ -27,11 +29,15 @@
       "sku": "NK-AF1-BLK-41",
       "color": "Black",
       "size": 41,
+      "gender": "Unisex",
+      "stock_quantity": 30,
       "price_modifier": 0,
       "thumbnail": "https://example.com/images/nike-af1-blk.jpg"
     }
   ],
   "ratings_average": 4.8,
   "reviews_count": 150,
+  "sales_count": 500,
+  "is_featured": true,
   "created_at": "2023-10-25T10:00:00Z"
 }

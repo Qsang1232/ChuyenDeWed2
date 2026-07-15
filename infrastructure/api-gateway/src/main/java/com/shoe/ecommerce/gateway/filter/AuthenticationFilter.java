@@ -26,13 +26,18 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
         return ((exchange, chain) -> {
             String path = exchange.getRequest().getURI().getPath();
 
-            // Skip auth for login and register
-            if (path.startsWith("/api/auth/") || path.startsWith("/auth/")) {
+            // Skip auth for login, register, forgot/reset password
+            if (path.startsWith("/api/auth")) {
                 return chain.filter(exchange);
             }
 
             // Skip auth for public product listing
             if (path.startsWith("/api/products") && exchange.getRequest().getMethod() == HttpMethod.GET) {
+                return chain.filter(exchange);
+            }
+
+            // Skip auth for public category listing
+            if (path.startsWith("/api/categories") && exchange.getRequest().getMethod() == HttpMethod.GET) {
                 return chain.filter(exchange);
             }
 
@@ -58,31 +63,36 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             }
 
             try {
-                // Validate the token (throws exception if signature invalid - TH11)
+                // Validate the token (throws exception if signature invalid)
                 jwtUtil.validateToken(authHeader);
                 
                 Claims claims = jwtUtil.getClaims(authHeader);
                 String role = claims.get("role", String.class);
                 Long userId = claims.get("userId", Long.class);
 
-                // TH6 & TH7: Only ADMIN can POST to /api/products
-                if (path.startsWith("/api/products") && exchange.getRequest().getMethod() == HttpMethod.POST) {
-                    if (!"ADMIN".equals(role)) {
-                        return onError(exchange, "Forbidden: Admins only", HttpStatus.FORBIDDEN);
+                // Only ADMIN can mutate products, categories, and upload files
+                if (path.startsWith("/api/products") || path.startsWith("/api/categories") || path.startsWith("/api/upload")) {
+                    HttpMethod method = exchange.getRequest().getMethod();
+                    if (method == HttpMethod.POST || method == HttpMethod.PUT || method == HttpMethod.DELETE) {
+                        if (!"ADMIN".equals(role)) {
+                            return onError(exchange, "Forbidden: Admins only", HttpStatus.FORBIDDEN);
+                        }
                     }
                 }
 
-                exchange.getRequest().mutate()
-                        .header("X-Auth-Username", claims.getSubject())
-                        .header("X-Auth-Role", role != null ? role : "")
-                        .header("X-User-Id", userId != null ? String.valueOf(userId) : "")
+                ServerWebExchange mutatedExchange = exchange.mutate()
+                        .request(exchange.getRequest().mutate()
+                                .header("X-Auth-Username", claims.getSubject())
+                                .header("X-Auth-Role", role != null ? role : "")
+                                .header("X-User-Id", userId != null ? String.valueOf(userId) : "")
+                                .build())
                         .build();
+
+                return chain.filter(mutatedExchange);
 
             } catch (Exception e) {
                 return onError(exchange, "Unauthorized access to application: " + e.getMessage(), HttpStatus.UNAUTHORIZED);
             }
-            
-            return chain.filter(exchange);
         });
     }
 

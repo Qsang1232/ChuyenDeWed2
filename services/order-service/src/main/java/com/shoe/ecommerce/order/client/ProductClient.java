@@ -11,4 +11,7 @@ public interface ProductClient {
     
     @GetMapping("/api/products/{id}")
     ProductDto getProductById(@PathVariable("id") Long id);
+
+    @org.springframework.web.bind.annotation.PostMapping("/api/products/deduct-stock")
+    void deductStock(@org.springframework.web.bind.annotation.RequestBody com.shoe.ecommerce.order.dto.StockDeductRequest request);
 }

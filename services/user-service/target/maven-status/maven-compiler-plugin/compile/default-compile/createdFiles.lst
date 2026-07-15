@@ -2,10 +2,12 @@ com\shoe\ecommerce\user\entity\User.class
 com\shoe\ecommerce\user\UserServiceApplication.class
 com\shoe\ecommerce\user\controller\AuthController$LoginRequest.class
 com\shoe\ecommerce\user\security\JwtTokenProvider.class
+com\shoe\ecommerce\user\service\EmailService.class
 com\shoe\ecommerce\user\controller\AuthController.class
-com\shoe\ecommerce\user\controller\AuthController$AuthResponse.class
 com\shoe\ecommerce\user\controller\AuthController$RegisterRequest.class
-com\shoe\ecommerce\user\controller\AuthController$TokenRefreshRequest.class
-com\shoe\ecommerce\user\service\UserService.class
 com\shoe\ecommerce\user\repository\UserRepository.class
 com\shoe\ecommerce\user\security\SecurityConfig.class
+com\shoe\ecommerce\user\controller\ForgotPasswordController.class
+com\shoe\ecommerce\user\controller\AuthController$AuthResponse.class
+com\shoe\ecommerce\user\controller\AuthController$TokenRefreshRequest.class
+com\shoe\ecommerce\user\service\UserService.class

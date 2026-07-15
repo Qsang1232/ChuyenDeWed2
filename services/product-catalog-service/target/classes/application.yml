@@ -1,22 +1,27 @@
 server:
   port: 8810
+  error:
+    include-message: always
 
 spring:
   application:
     name: product-catalog-service
   datasource:
-    url: jdbc:mysql://localhost:3306/product_db?createDatabaseIfNotExist=true
-    username: root
-    password: root
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/product_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: update
     show-sql: true
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+  cache:
+    type: redis
   servlet:
     multipart:
       max-file-size: 10MB
@@ -28,3 +33,15 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
   instance:
     prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+# Upload directory configuration
+# Local dev: ./uploads/ (relative, works on Windows/Linux)
+# Docker: overridden by APP_UPLOAD_DIR=/app/uploads/
+app:
+  upload-dir: ${APP_UPLOAD_DIR:./uploads/}

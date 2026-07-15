@@ -21,6 +21,8 @@ function AdminLayout() {
   const menuItems = [
     { path: '/admin', label: '📊 Tổng quan', icon: '📊' },
     { path: '/admin/products', label: '📦 Quản lý Sản phẩm', icon: '📦' },
+    { path: '/admin/categories', label: '🏷️ Quản lý Danh mục', icon: '🏷️' },
+    { path: '/admin/brands', label: '🏭 Quản lý Hãng giày', icon: '🏭' },
     { path: '/admin/orders', label: '🧾 Quản lý Đơn hàng', icon: '🧾' },
   ];
 

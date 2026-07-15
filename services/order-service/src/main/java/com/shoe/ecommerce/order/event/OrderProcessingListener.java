@@ -26,7 +26,8 @@ public class OrderProcessingListener {
             System.out.println("Order " + event.getOrderCode() + " successfully processed and COMPLETED.");
             
         } catch (InterruptedException e) {
-            System.err.println("Error processing order: " + e.getMessage());
+            Thread.currentThread().interrupt(); // Restore interrupt flag
+            System.err.println("Order processing interrupted: " + e.getMessage());
         }
     }
 }

@@ -19,9 +19,24 @@ public class ProductService {
     }
 
     @Cacheable(value = "products")
-    public List<Product> getAllProducts() {
+    public List<Product> getAllProducts(String category) {
         System.out.println("Fetching products from DB (Not from Cache)");
+        if (category != null && !category.isEmpty()) {
+            return productRepository.findByCategory(category);
+        }
         return productRepository.findAll();
+    }
+
+    public org.springframework.data.domain.Page<Product> getPagedProducts(String category, String search, org.springframework.data.domain.Pageable pageable) {
+        return productRepository.findWithFilters(category, search, pageable);
+    }
+
+    public List<Product> getFeaturedProducts() {
+        return productRepository.findByIsFeaturedTrue();
+    }
+
+    public List<Product> getBestSellingProducts() {
+        return productRepository.findTop10ByOrderBySalesCountDesc();
     }
 
     public Optional<Product> getProductById(Long id) {
@@ -41,6 +56,11 @@ public class ProductService {
             existing.setBasePrice(updatedProduct.getBasePrice());
             existing.setImageUrl(updatedProduct.getImageUrl());
             existing.setBrand(updatedProduct.getBrand());
+            existing.setCategory(updatedProduct.getCategory());
+            existing.setSalesCount(updatedProduct.getSalesCount());
+            existing.setIsFeatured(updatedProduct.getIsFeatured());
+            existing.setStockQuantityMen(updatedProduct.getStockQuantityMen());
+            existing.setStockQuantityWomen(updatedProduct.getStockQuantityWomen());
             return productRepository.save(existing);
         }).orElseThrow(() -> new RuntimeException("Product not found with id: " + id));
     }
@@ -48,5 +68,21 @@ public class ProductService {
     @CacheEvict(value = "products", allEntries = true)
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
+    }
+
+    @CacheEvict(value = "products", allEntries = true)
+    public void deductStock(com.shoe.ecommerce.product.dto.StockDeductRequest request) {
+        for (com.shoe.ecommerce.product.dto.StockDeductRequest.StockDeductItem item : request.getItems()) {
+            productRepository.findById(item.getProductId()).ifPresent(product -> {
+                if ("Men".equalsIgnoreCase(item.getGender())) {
+                    int current = product.getStockQuantityMen() != null ? product.getStockQuantityMen() : 0;
+                    product.setStockQuantityMen(Math.max(0, current - item.getQuantity()));
+                } else if ("Women".equalsIgnoreCase(item.getGender())) {
+                    int current = product.getStockQuantityWomen() != null ? product.getStockQuantityWomen() : 0;
+                    product.setStockQuantityWomen(Math.max(0, current - item.getQuantity()));
+                }
+                productRepository.save(product);
+            });
+        }
     }
 }

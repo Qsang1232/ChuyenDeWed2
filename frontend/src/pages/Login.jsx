@@ -38,10 +38,10 @@ function Login() {
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <input 
             type="text" 
-            placeholder="Tên đăng nhập" 
+            placeholder="Tên đăng nhập / Email" 
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-gray-500 focus:border-emerald-500 focus:outline-none"
+            className="input-field"
             required
           />
           <input 
@@ -49,10 +49,15 @@ function Login() {
             placeholder="Mật khẩu" 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-lg py-3 px-4 text-white placeholder-gray-500 focus:border-emerald-500 focus:outline-none"
+            className="input-field"
             required
           />
-          <button type="submit" className="w-full py-3 rounded-xl bg-emerald-500 text-white font-bold hover:bg-emerald-400 mt-2">
+          <div className="flex justify-end">
+            <Link to="/forgot-password" className="text-sm text-slate-400 hover:text-emerald-400 transition-colors">
+              Quên mật khẩu?
+            </Link>
+          </div>
+          <button type="submit" className="btn-primary w-full mt-2">
             Đăng nhập
           </button>
         </form>

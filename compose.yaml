@@ -129,6 +129,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/product_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATA_REDIS_HOST=redis
       - SPRING_DATA_REDIS_PORT=6379
+      - APP_UPLOAD_DIR=/app/uploads/
+    volumes:
+      - product_uploads:/app/uploads
     depends_on:
       - eureka-server
       - mysql
@@ -178,3 +181,4 @@ networks:
 
 volumes:
   mysql_data:
+  product_uploads:
