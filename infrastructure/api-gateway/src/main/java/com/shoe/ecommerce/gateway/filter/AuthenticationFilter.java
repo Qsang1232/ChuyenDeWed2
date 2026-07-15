@@ -80,6 +80,13 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     }
                 }
 
+                // Protect Admin User APIs
+                if (path.startsWith("/api/users/admin")) {
+                    if (!"ADMIN".equals(role)) {
+                        return onError(exchange, "Forbidden: Admins only", HttpStatus.FORBIDDEN);
+                    }
+                }
+
                 ServerWebExchange mutatedExchange = exchange.mutate()
                         .request(exchange.getRequest().mutate()
                                 .header("X-Auth-Username", claims.getSubject())

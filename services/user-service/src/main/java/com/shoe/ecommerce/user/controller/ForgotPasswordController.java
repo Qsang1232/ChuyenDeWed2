@@ -42,17 +42,15 @@ public class ForgotPasswordController {
 
         if (userOpt.isPresent()) {
             User user = userOpt.get();
-            // Generate a random 8-character password
-            String newPassword = UUID.randomUUID().toString().substring(0, 8);
-            user.setPassword(passwordEncoder.encode(newPassword));
-            user.setResetToken(null);
-            user.setResetTokenExpiry(null);
-            userRepository.save(user);
+            String resetToken = UUID.randomUUID().toString();
+            user.setResetToken(resetToken);
+            user.setResetTokenExpiry(LocalDateTime.now().plusHours(1));
 
             try {
-                emailService.sendNewPasswordEmail(email, newPassword);
+                emailService.sendPasswordResetEmail(email, resetToken);
+                userRepository.save(user); // Lưu sau khi gửi thành công hoặc trước cũng ok
             } catch (Exception e) {
-                System.err.println("Failed to send new password email: " + e.getMessage());
+                System.err.println("Failed to send password reset email: " + e.getMessage());
                 return ResponseEntity.status(500).body(Map.of("message", "Không thể gửi email. Vui lòng thử lại sau."));
             }
         }

@@ -17,6 +17,7 @@ import AdminProducts from './pages/admin/AdminProducts';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminCategories from './pages/admin/AdminCategories';
 import AdminBrands from './pages/admin/AdminBrands';
+import AdminUsers from './pages/admin/AdminUsers';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './index.css';
@@ -44,6 +45,7 @@ function App() {
               <Route path="categories" element={<AdminCategories />} />
               <Route path="brands" element={<AdminBrands />} />
               <Route path="orders" element={<AdminOrders />} />
+              <Route path="users" element={<AdminUsers />} />
             </Route>
           </Routes>
         </main>

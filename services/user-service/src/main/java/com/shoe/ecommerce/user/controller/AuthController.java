@@ -90,6 +90,11 @@ public class AuthController {
         }
         if (userOpt.isPresent()) {
             User user = userOpt.get();
+            
+            if (user.getIsActive() != null && !user.getIsActive()) {
+                return ResponseEntity.status(403).body("Tài khoản của bạn đã bị khoá!");
+            }
+
             if (userService.verifyPassword(loginRequest.password, user.getPassword())) {
                 String accessToken = tokenProvider.generateAccessToken(user.getId(), user.getUsername(), user.getRole());
                 String refreshToken = tokenProvider.generateRefreshToken(user.getId(), user.getUsername());

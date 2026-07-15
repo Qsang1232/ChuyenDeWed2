@@ -15,26 +15,30 @@ public class EmailService {
     @Value("${spring.mail.username:}")
     private String mailFrom;
 
-    public void sendNewPasswordEmail(String toEmail, String newPassword) {
+    @Value("${app.frontend.url:http://localhost:5173}")
+    private String frontendUrl;
+
+    public void sendPasswordResetEmail(String toEmail, String resetToken) {
         if (mailSender == null || mailFrom == null || mailFrom.isBlank()) {
-            // Mail server not configured - log the new password for development
+            // Mail server not configured - log the link for development
             System.out.println("=== [DEV MODE - EMAIL NOT SENT] ===");
-            System.out.println("New password for " + toEmail + ": " + newPassword);
+            System.out.println("Reset link for " + toEmail + ": " + frontendUrl + "/reset-password?token=" + resetToken);
             System.out.println("=====================================");
             return;
         }
 
         try {
+            String resetLink = frontendUrl + "/reset-password?token=" + resetToken;
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(mailFrom);
             message.setTo(toEmail);
-            message.setSubject("Mật khẩu mới - Kicks VN");
-            message.setText("Yêu cầu khôi phục mật khẩu của bạn đã được xử lý.\n\nMật khẩu mới của bạn là: " + newPassword + "\n\nVui lòng đăng nhập và đổi lại mật khẩu của bạn để đảm bảo an toàn.");
+            message.setSubject("Đặt lại mật khẩu - Kicks VN");
+            message.setText("Yêu cầu khôi phục mật khẩu của bạn đã được xử lý.\n\nĐể đặt lại mật khẩu, vui lòng nhấp vào liên kết sau:\n" + resetLink + "\n\nLiên kết này sẽ hết hạn sau 1 giờ.");
             mailSender.send(message);
-            System.out.println("New password email sent to: " + toEmail);
+            System.out.println("Password reset email sent to: " + toEmail);
         } catch (Exception e) {
-            System.err.println("Failed to send new password email to " + toEmail + ": " + e.getMessage());
-            throw new RuntimeException("Không thể gửi email chứa mật khẩu mới. Vui lòng thử lại sau.");
+            System.err.println("Failed to send password reset email to " + toEmail + ": " + e.getMessage());
+            throw new RuntimeException("Không thể gửi email chứa link đặt lại mật khẩu. Vui lòng thử lại sau.");
         }
     }
 }

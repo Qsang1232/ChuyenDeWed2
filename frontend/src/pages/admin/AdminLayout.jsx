@@ -24,6 +24,7 @@ function AdminLayout() {
     { path: '/admin/categories', label: '🏷️ Quản lý Danh mục', icon: '🏷️' },
     { path: '/admin/brands', label: '🏭 Quản lý Hãng giày', icon: '🏭' },
     { path: '/admin/orders', label: '🧾 Quản lý Đơn hàng', icon: '🧾' },
+    { path: '/admin/users', label: '👥 Quản lý Tài khoản', icon: '👥' },
   ];
 
   return (

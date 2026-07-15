@@ -83,6 +83,7 @@ spring:
           predicates:
             - Path=/api/users/**, /api/auth/**
           filters:
+            - AuthenticationFilter
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter.replenishRate: 2

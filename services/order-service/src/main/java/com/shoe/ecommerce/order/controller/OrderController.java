@@ -159,6 +159,16 @@ public class OrderController {
         return ResponseEntity.status(403).body("Forbidden");
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> getOrdersByUserId(
+            @PathVariable Long userId,
+            @RequestHeader(value = "X-Auth-Role", required = false) String role) {
+        if ("ADMIN".equals(role)) {
+            return ResponseEntity.ok(orderService.findOrdersByUserId(userId));
+        }
+        return ResponseEntity.status(403).body("Forbidden: Admins only");
+    }
+
     // Admin: Update order status
     public static class StatusUpdateRequest {
         public String status;
